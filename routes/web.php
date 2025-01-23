@@ -8,7 +8,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\DetailPenjualanController;
 use App\Http\Controllers\StokController;
 
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     return view('app');
 });
 

@@ -13,7 +13,7 @@ class StokController extends Controller
         if (!Auth::check()) {
             return redirect('login');
         }
-        $posts = Produk::Latest()->get();
+        $posts = Produk::latest()->get();
         return view('stok/index', compact('posts'));
     }
 
@@ -22,11 +22,17 @@ class StokController extends Controller
         if (!Auth::check()) {
             return redirect('login');
         }
+
+
         $request->validate([
             'idproduk' => 'required',
-            'tmbstok' => 'required',
+            'tmbstok' => 'required|numeric|min:1',
         ]);
+
+
         Produk::where('id', $request->idproduk)->increment('Stok', $request->tmbstok);
-        return redirect()->route('stok.index')->with(['success' => 'Data Berhasil Disimpan!']);
+
+
+    return redirect()->route('stok.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 }

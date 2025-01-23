@@ -21,9 +21,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
 
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script> --}}
 
-    <script src="{{ asset('plugins/jquery/jquery.js') }}"></script>
+    <script src="{{ URL::asset('/plugins/jquery/jquery.js') }}"></script>
 
     <script src="{{ URL::asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
@@ -177,13 +177,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 href="#">SMKN7PTK</a>.</strong>
         </footer>
     </div>
-    <!-- ./wrapper -->
-
-    <!-- REQUIRED SCRIPTS -->
-
-    <!-- jQuery -->
-
-
 </body>
 
 </html>

@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-3">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="idpelanggan" placeholder="ID Pelanggan">
+                                    <input type="text" class="form-control" name="idpelanggan" onchange="idpelangganinput();" placeholder="ID Pelanggan">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-tape"></span>
@@ -33,7 +33,6 @@
                                 </div>
                                 <div class="input-group mb-3">
                                     <input type="date" class="form-control" name="tanggal" placeholder="Tanggal" id="datePicker">
-
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-tag"></span>
@@ -78,8 +77,7 @@
                                     <div class="row">
                                         <div class="col-2">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="idbarang[]" id="idbarang1"
-                                                    onchange="idbaranginput(1);">
+                                                <input type="text" class="form-control" name="idbarang[]" id="idbarang1" onchange="idbaranginput(1);">
                                             </div>
                                         </div>
                                         <div class="col-3">
@@ -89,27 +87,23 @@
                                         </div>
                                         <div class="col-2">
                                             <div class="form-group">
-                                                <input type="number" class="form-control text-center" name="jumlah[]"
-                                                    id="jumlah1" onchange="hitotal(1);">
+                                                <input type="number" class="form-control text-center" name="jumlah[]" id="jumlah1" onchange="hitotal(1);">
                                             </div>
                                         </div>
                                         <div class="col-2">
                                             <div class="form-group">
-                                                <input type="number" class="form-control text-right" name="harga[]"
-                                                    id="harga1">
+                                                <input type="number" class="form-control text-right" name="harga[]" id="harga1" onchange="hitotal(1);">
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <input type="number" class="totalprice form-control text-right" name="total[]"
-                                                    id="total1">
+                                                <input type="number" class="totalprice form-control text-right" name="total[]" id="total1" readonly>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <a href="javascript:void(0);" class="add_button btn btn-success btn-xl float-right"
-                                        title="Add field"><i class="fa fa-plus"></i></a>
+                                    <a href="javascript:void(0);" class="add_button btn btn-success btn-xl float-right" title="Add field"><i class="fa fa-plus"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -117,22 +111,18 @@
                 </div>
             </div>
         </div>
-    @endsection
-@endauth
 
 <script>
     $(document).ready(function() {
-        // Set current date to datePicker field if available
         if (document.getElementById('datePicker')) {
             document.getElementById('datePicker').valueAsDate = new Date();
         }
 
-        var maxField = 3; // Maximum fields allowed
-        var addButton = $('.add_button'); // Add button selector
-        var wrapper = $('.field_wrapper'); // Wrapper for new fields
-        var x = 1; // Initial field counter
+        var maxField = 3;
+        var addButton = $('.add_button');
+        var wrapper = $('.field_wrapper');
+        var x = 1;
 
-        // Field template for dynamic row creation
         var fieldHTML = function(index) {
             return `<div class="row dynamic-row">
                     <div class="col-2">
@@ -152,76 +142,90 @@
                     </div>
                     <div class="col-2">
                         <div class="form-group">
-                            <input type="number" class="form-control text-right" name="harga[]" id="harga${index}">
+                            <input type="number" class="form-control text-right" name="harga[]" id="harga${index}" onchange="hitotal(${index});">
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
-                            <input type="number" class="totalprice form-control text-right" name="total[]" id="total${index}">
+                            <input type="number" class="totalprice form-control text-right" name="total[]" id="total${index}" readonly>
                         </div>
                     </div>
                     <a href="javascript:void(0);" class="float-right remove_button" title="Remove field"><i class="fa fa-minus"></i></a>
                 </div>`;
         };
 
-        // Add button on click event
         $(addButton).click(function() {
             if (x < maxField) {
                 x++;
-                $(wrapper).append(fieldHTML(x)); // Add field HTML
+                $(wrapper).append(fieldHTML(x));
             } else {
-                alert(`Jumlah barang: ${maxField} telah terlampaui.`);
+                alert('Jumlah barang: ${maxField} telah terlampaui.');
             }
         });
 
-        // Remove button event listener
         $(wrapper).on('click', '.remove_button', function(e) {
             e.preventDefault();
-            $(this).closest('.dynamic-row').remove(); // Remove the specific row
+            $(this).closest('.dynamic-row').remove();
             x--;
             totalakhir();
         });
     });
 
-    // Function to handle AJAX request for barang data
     function idbaranginput(index) {
-    console.log("Index: ", index); // Debugging index
-    console.log("ID Barang: ", $("#idbarang" + index).val()); // Debugging idbarang
-    $.ajax({
-        url: "{{ route('penjualan.databarang') }}",
-        type: "POST",
-        cache: false,
-        data: {
-            "idbarang": $("#idbarang" + index).val(),
-            "_token": $("meta[name='csrf-token']").attr("content"),
-        },
-        success: function(response) {
-            $('#harga' + index).val(response.harga);
-            $('#barang' + index).val(response.barang);
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            alert("Barang tidak ditemukan!");
-        },
-    });
-}
+        $.ajax({
+            url: "{{ route('penjualan.databarang') }}",
+            type: "POST",
+            cache: false,
+            data: {
+                "idbarang": $("#idbarang" + index).val(),
+                "_token": $("meta[name='csrf-token']").attr("content"),
+            },
+            success: function(response) {
+                $('#harga' + index).val(response.harga);
+                $('#barang' + index).val(response.barang);
+                hitotal(index);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Barang tidak ditemukan!");
+            },
+        });
+    }
 
+    function idpelangganinput() {
+        $.ajax({
+            url: "{{ route('penjualan.datapelanggan') }}",
+            type: "POST",
+            cache: false,
+            data: {
+                "idpelanggan": $("input[name=idpelanggan]").val(),
+                "_token": $("meta[name='csrf-token']").attr("content"),
+            },
+            success: function(response) {
+                $('input[name=nama]').val(response.nama);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Nama Pelanggan tidak ditemukan!");
+            },
+        });
+    }
 
-    // Function to calculate total for each item and update grand total
     function hitotal(index) {
         var harga = parseFloat($("#harga" + index).val()) || 0;
         var jumlah = parseInt($("#jumlah" + index).val()) || 0;
         var total = harga * jumlah;
 
-        $('#total' + index).val(total); // Set individual total
-        totalakhir(); // Update grand total
+        $('#total' + index).val(total);
+        totalakhir();
     }
 
-    // Function to calculate the final total of all items
     function totalakhir() {
         var grandTotal = 0;
         $(".totalprice").each(function() {
             grandTotal += parseFloat($(this).val()) || 0;
         });
-        $("#grandTotalField").val(grandTotal); // Assuming there’s a grand total field
+        $("#grandTotalField").val(grandTotal);
+        $("input[name=total]").val(grandTotal);
     }
 </script>
+@endsection
+@endauth

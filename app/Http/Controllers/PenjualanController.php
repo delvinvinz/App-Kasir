@@ -114,6 +114,8 @@ class PenjualanController extends Controller
             'success' => true,
             'id' => $datapelanggan->id,
             'nama' => $datapelanggan->NamaPelanggan,
+            // 'nama' => 'treste',
+
         ]);
     }
 }

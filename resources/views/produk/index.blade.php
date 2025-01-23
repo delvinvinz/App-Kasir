@@ -22,7 +22,7 @@
                             <td>{{ $n++ }}</td>
                             <td>{{ $post->NamaProduk }}</td>
                             <td>Rp. {{ $post->Harga }}</td>
-                            <td>{{ $post->Stok }}</td>
+                            <td id="stok-{{ $post->id }}">{{ $post->Stok }}</td>
                             <td>
                                 <a href="{{ route('produk.edit', $post->id) }}" class="btn btn-md btn-primary">Edit</a>
                                 <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('produk.destroy', $post->id) }}" method="POST" style="display:inline;">
@@ -44,3 +44,5 @@
         </div>
     @endsection
 @endauth
+
+

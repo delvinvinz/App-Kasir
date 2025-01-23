@@ -13,7 +13,7 @@ class UserController extends Controller
     public function login()
     {
         if (Auth::check()) {
-            return redirect('dashboard');
+            return redirect('/');
         } else {
             return view('log');
         }
@@ -27,7 +27,7 @@ class UserController extends Controller
         ]);
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
